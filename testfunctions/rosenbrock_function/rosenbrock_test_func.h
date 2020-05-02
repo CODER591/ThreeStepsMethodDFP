@@ -5,9 +5,9 @@
 #include <vector>
 
 template <typename T>
-LONG RosenbrockFunc(std::vector<T> & X)
+T RosenbrockFunc(std::vector<T> & X)
 {
-  LONG sum = 0;
+  T sum = 0;
   /*if(X.size()==2)
   {
     return T(100) * (X[1] - Pow(X[0], 2))*(X[1] - Pow(X[0], 2)) + (1 - X[0])*(1 - X[0]);
@@ -18,6 +18,7 @@ LONG RosenbrockFunc(std::vector<T> & X)
   }
   return sum;
 }
+
 template <typename T>
 std::vector<T>  RosenbrockFunc_derivative(std::vector<T> &X) {
   std::vector<T> result(X.size());

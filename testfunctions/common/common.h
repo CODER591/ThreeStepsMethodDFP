@@ -24,9 +24,10 @@ typedef long double LONG;
 
 /* Not quite remember regarding reason of redefinition of this function */
 //delete me pretendent
-LONG Pow(LONG a, int powr)
+template <typename T>
+T Pow(T a, int powr)
 {
-  LONG tmp = 1;
+  T tmp = 1;
   for (int i = 0; i < powr; i++)
   {
     tmp *= a;
