@@ -10,5 +10,6 @@ int main() {
 
    std::vector<LONG> X;
    DFP(X);
+   
    return 0;
 }

@@ -59,14 +59,13 @@ std::vector<T> nabla(std::vector<T>& X, std::vector<T> (*derivative)(std::vector
 template <typename T>
 void DFP(std::vector<T> & X) {
 
-
     /* Step 1
      * 1. calculate g_k
-     * 2. calculate - H_k
-     * 3. calculate d_k
+     * 2. calculate -H_k
+     * 3. calculate d_k = -H_(k) * g_(k)
      */
      std::vector<T> (*ros_deriv)(std::vector<T>&) = &RosenbrockFunc_derivative;
-     std::vector <T> g_k = nabla(X,ros_deriv);
-
+     std::vector<T> g_k = nabla(X,ros_deriv); // need  manual check
+     //std::vector<T> d_k = vec_matr_multiply(hessian_matr, g_k);
 
 }
