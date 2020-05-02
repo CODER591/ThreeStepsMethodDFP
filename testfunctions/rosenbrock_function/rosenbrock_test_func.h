@@ -4,7 +4,7 @@
 #include "common/common.h"
 
 
-template <typename T>//+
+template <typename T>
 LONG RosenbrockFunc(vector<T> & X)
 {
   LONG sum = 0;

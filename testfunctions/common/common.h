@@ -22,6 +22,18 @@ typedef long double LONG;
 
 #endif
 
+/* Not quite remember regarding reason of redefinition of this function */
+//delete me pretendent
+LONG Pow(LONG a, int powr)
+{
+  LONG tmp = 1;
+  for (int i = 0; i < powr; i++)
+  {
+    tmp *= a;
+  }
+  return tmp;
+}
+
 
 
 
