@@ -1,11 +1,10 @@
 
 CC=g++
 
-debug: CC += -g
-debug: all
-
-
 all: main
+
+debug: CC += -g
+debug: main
 
 main:
 	$(CC) main.cpp -o finish.out
