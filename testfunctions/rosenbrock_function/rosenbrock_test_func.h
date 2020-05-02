@@ -18,5 +18,18 @@ LONG RosenbrockFunc(vector<T> & X)
   }
   return sum;
 }
+template <typename T>
+std::vector<T>  RosenbrockFunc_derivative(std::vector<T> &X) {
+  std::vector<T> result(X.size());
+  for (int i = 0; i < X.size(); i++) {
+    if ((i + 1) % 2 == 0) {
+      result[i] = T(100 * 2) * (X[i] - Pow(X[i - 1], 2));
+    }
+    if ((i + 1) % 2 != 0) {
+      result[i] = T(-400) * X[i] * (X[i + 1] - Pow(X[i], 2)) - T(2) * (T(1) - X[i]);
+    }
+  }
+  return result;
+}
 
-#endif
+#endif /* ROSENROCK_FUNC_H */
