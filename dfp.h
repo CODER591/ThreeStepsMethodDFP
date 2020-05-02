@@ -3,8 +3,10 @@ This file is created for contatining DFP method implementation
 Davis-Flatcher-Powell
 Presentation with theoretical desctiption of this method is in repository files
 */
-
 #include <vector>
+#include <algorithm>
+#include "testfunctions/common/common.h"
+#include "testfunctions/rosenbrock_function/rosenbrock_test_func.h"
 
 template<typename T>
 std::vector<T> vectors_difference(std::vector<T>& X, std::vector<T>& Y) {
@@ -23,7 +25,7 @@ std::vector<T> vectors_difference(std::vector<T>& X, std::vector<T>& Y) {
 * Nabla is vector that contains value of derivative in particular point
 */
 template <typename T>
-std:vector<T> nabla(std::vector<T>& X, std::vector<T> (*derivative)(std::vector<T>&)) {
+std::vector<T> nabla(std::vector<T>& X, std::vector<T> (*derivative)(std::vector<T>&)) {
     return derivative(X);
 }
 
@@ -53,3 +55,18 @@ std:vector<T> nabla(std::vector<T>& X, std::vector<T> (*derivative)(std::vector<
   Alpha coud be divided on some number, or  alpha == 1
   instead mysterious argmin
 */
+
+template <typename T>
+void DFP(std::vector<T> & X) {
+
+
+    /* Step 1
+     * 1. calculate g_k
+     * 2. calculate - H_k
+     * 3. calculate d_k
+     */
+     std::vector<T> (*ros_deriv)(std::vector<T>&) = &RosenbrockFunc_derivative;
+     std::vector <T> g_k = nabla(X,ros_deriv);
+
+
+}

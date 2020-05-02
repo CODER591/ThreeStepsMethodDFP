@@ -1,11 +1,11 @@
 #ifndef ROSENBROCK_FUNC_H
-#define ROSENROCK_FUNC_H
+#define ROSENBROCK_FUNC_H
 
-#include "common/common.h"
-
+#include "../common/common.h"
+#include <vector>
 
 template <typename T>
-LONG RosenbrockFunc(vector<T> & X)
+LONG RosenbrockFunc(std::vector<T> & X)
 {
   LONG sum = 0;
   /*if(X.size()==2)
