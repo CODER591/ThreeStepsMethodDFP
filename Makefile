@@ -1,6 +1,10 @@
 
 CC=g++
 
+debug: CC += -g
+debug: all
+
+
 all: main
 
 main:
@@ -9,3 +13,4 @@ main:
 clean:
 	rm -rf *.out
 	rm -rf *.o
+	rm -rf *.dSYM
