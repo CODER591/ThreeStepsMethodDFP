@@ -9,6 +9,15 @@ Presentation with theoretical desctiption of this method is in repository files
 #include "testfunctions/rosenbrock_function/rosenbrock_test_func.h"
 
 template <typename T>
+T vector_scal_mult(std::vector<T>& X, std::vector<T>& Y) {
+  T result = 0;
+  for(size_t i = 0;i < X.size(); i++) {
+    result += X[i]*Y[i];
+  }
+  return result;
+}
+
+template <typename T>
 std::vector<T> vectors_sum(std::vector<T>& X, std::vector<T>& Y) {
   std::vector<T> result_v(X.size());
   for(size_t i = 0;i < X.size(); i++) {
@@ -49,11 +58,16 @@ std::vector<T> scalar_mult_vec(std::vector<T> &X,T scalar) {
 template <typename T>
 std::vector<std::vector<T> > mult_matrix_on_scalar(std::vector<std::vector<T> >& matr,T scalar) {
   std::vector<std::vector<T> > result(matr.size());
-
-
+  for (size_t i = 0 ; i < matr.size() ; i++ ){
+    result[i].resize(matr.size());
+  }
+  for(size_t i=0; i < matr.size(); i++) {
+    for(size_t j = 0; j < matr[i].size(); j++) {
+      result[i][j]=matr[i][j]*scalar;
+    }
+  }
   return result;
 }
-
 
 /* Nabla is vector that holds derivatives by each variable accordingly
 * Example:
@@ -116,23 +130,48 @@ void DFP(std::vector<T> & X) {
       */
 
      std::vector<T> g_k = nabla(X,rosenbrock_deriv); // check
-     hessian_matr = mult_matrix_on_scalar(hessian_matr,(T)-1); //check
-     std::vector<T> d_k = matr_vec_multiply(hessian_matr, g_k); //check
+     std::vector<std::vector<T> > minus_H_k = mult_matrix_on_scalar(hessian_matr,(T)-1); //check
+     std::vector<T> d_k = matr_vec_multiply(minus_H_k, g_k); //check
      /* Step 2
       * 1. calculate x_k+1
       * 2. calculate p_k
       * 3. calculate g_(k+1)
       */
-      std::vector<T> alpha_d_k = scalar_mult_vec(d_k,alpha); //check
-      std::vector<T> X_k_next = vectors_sum(X,alpha_d_k); //check
+      std::vector<T> alpha_d_k = scalar_mult_vec(d_k,alpha);
+      std::vector<T> X_k_next = vectors_sum(X,alpha_d_k);
       std::vector<T> p_k = alpha_d_k;
-      std::vector<T> g_k_next =nabla(X_k_next,rosenbrock_deriv); 
+      std::vector<T> g_k_next = nabla(X_k_next,rosenbrock_deriv);
 
       /* Step 3
        * 1. calculate q_k
        * 2. Main hessian formula
        * ....
        */
+       std::vector<T>q_k = vectors_difference(g_k_next,g_k);
+
+       /* Main Hessian formula symmetric rank correction one (SR-1) */
+       /* We know the first component H_k*/
+
+
+       std::vector<std::vector<T> > hessian_matr_next;
+
+       std::vector<T>H_kq_K = matr_vec_multiply(minus_H_k,q_k);
+       /*Represents p_k - H_k*q_k*/
+       std::vector<T>vec_hes_dif = vectors_sum(p_k,H_kq_K);
+       T numerator = vector_scal_mult(vec_hes_dif,vec_hes_dif);
+
+       /* Denominator will be matrix */
+
+       /*
+        1) To implement Denominator we need to invert numerator and Denominator
+        2) Multiply (q_k) and the vec_hes_dif -> get matrix
+        3) Find inverted matrix
+        4) And multiply it on the 1/numerator scalar
+        6) Plus hessian
+        7) Go to Step 4 in DFP algorithm
+       */
+
+
 
 
 
