@@ -226,21 +226,14 @@ void DFP(std::vector<T> & X) {
        vector_multipl_T
        invert_matrix
       */
+       /* Denominator will be matrix */
        std::vector<std::vector<T> > matrix_to_inverse = vector_multipl_T(q_k,H_kq_K);
-       matrix_to_inverse = invert_matrix(matrix_to_inverse);
+      // matrix_to_inverse = invert_matrix(matrix_to_inverse); //infinite cycle fix 
        std::vector<std::vector<T> > final_matr = mult_matrix_on_scalar(matrix_to_inverse,T(1)/numerator);
 
        std::vector<std::vector<T> > hessian_matr_next = sum_matrices(hessian_matr,final_matr);
-       /* Denominator will be matrix */
 
-       /*
-        1) To implement Denominator we need to invert numerator and Denominator
-        2) Multiply (q_k) and the vec_hes_dif -> get matrix
-        3) Find inverted matrix
-        4) And multiply it on the 1/numerator scalar
-        6) Plus hessian
-        7) Go to Step 4 in DFP algorithm
-       */
+       k+=1;
 
 
 
