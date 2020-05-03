@@ -9,6 +9,67 @@ Presentation with theoretical desctiption of this method is in repository files
 #include "testfunctions/rosenbrock_function/rosenbrock_test_func.h"
 
 template <typename T>
+std::vector<std::vector<T> > invert_matrix(std::vector<std::vector<T> > &X) {
+  int i,j,k;
+  T a,ratio;
+  std::vector<std::vector<T> > matrix(X.size());
+  for (size_t i = 0 ; i < X.size() ; i++ ){
+    matrix[i].resize(X.size());
+  }
+
+  int n = X.size();
+  for(i = 0; i < n; i++){
+        for(j = n; j < 2*n; j++){
+            if(i==(j-n))
+                matrix[i][j] = 1.0;
+            else
+                matrix[i][j] = 0.0;
+        }
+    }
+    for(i = 0; i < n; i++){
+        for(j = 0; j < n; j++){
+            if(i!=j){
+                ratio = matrix[j][i]/matrix[i][i];
+                for(k = 0; k < 2*n; k++){
+                    matrix[j][k] -= ratio * matrix[i][k];
+                }
+            }
+        }
+    }
+    for(i = 0; i < n; i++){
+        a = matrix[i][i];
+        for(j = 0; j < 2*n; j++){
+            matrix[i][j] /= a;
+        }
+    }
+    return matrix;
+}
+
+template <typename T>
+std::vector<std::vector<T> > sum_matrices (std::vector<std::vector<T> >&X,std::vector<std::vector<T> >&Y) {
+  std::vector<std::vector<T> > matrix(X.size());
+  for (size_t i = 0 ; i < X.size() ; i++ ){
+    matrix[i].resize(X.size());
+  }
+  for (int i = 0; i < X.size(); ++i){
+      for (int j = 0; j < X[i].size(); ++j){
+          matrix[i][j] = X[i][j] + Y[i][j];
+      }
+  }
+  return matrix;
+}
+template <typename T>
+std::vector<std::vector<T> > vector_multipl_T(std::vector<T> &X, std::vector<T> &Y){
+    std::vector<std::vector<T> > M(X.size(), std::vector<T>(X.size()));
+    for (int i = 0; i < X.size(); ++i){
+        for (int j = 0; j < X.size(); ++j){
+            M[i][j] = X[i] * Y[j];
+        }
+    }
+    return M;
+}
+
+template <typename T>
 T vector_scal_mult(std::vector<T>& X, std::vector<T>& Y) {
   T result = 0;
   for(size_t i = 0;i < X.size(); i++) {
@@ -123,6 +184,8 @@ void DFP(std::vector<T> & X) {
 
      std::vector<T> (*rosenbrock_deriv)(std::vector<T>&) = &RosenbrockFunc_derivative;
      T alpha = 1;
+     int k = 0; /* Number of iteration*/
+
      /* Step 1
       * 1. calculate g_k
       * 2. calculate -H_k
@@ -152,14 +215,22 @@ void DFP(std::vector<T> & X) {
        /* Main Hessian formula symmetric rank correction one (SR-1) */
        /* We know the first component H_k*/
 
-
-       std::vector<std::vector<T> > hessian_matr_next;
-
        std::vector<T>H_kq_K = matr_vec_multiply(minus_H_k,q_k);
        /*Represents p_k - H_k*q_k*/
        std::vector<T>vec_hes_dif = vectors_sum(p_k,H_kq_K);
        T numerator = vector_scal_mult(vec_hes_dif,vec_hes_dif);
 
+
+       /* Warning comment
+       This step is need a lot of checkings, because of unrelyiable functions
+       vector_multipl_T
+       invert_matrix
+      */
+       std::vector<std::vector<T> > matrix_to_inverse = vector_multipl_T(q_k,H_kq_K);
+       matrix_to_inverse = invert_matrix(matrix_to_inverse);
+       std::vector<std::vector<T> > final_matr = mult_matrix_on_scalar(matrix_to_inverse,T(1)/numerator);
+
+       std::vector<std::vector<T> > hessian_matr_next = sum_matrices(hessian_matr,final_matr);
        /* Denominator will be matrix */
 
        /*
