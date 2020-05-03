@@ -7,6 +7,8 @@ Presentation with theoretical desctiption of this method is in repository files
 #include <algorithm>
 #include "testfunctions/common/common.h"
 #include "testfunctions/rosenbrock_function/rosenbrock_test_func.h"
+#include "support_vec_functions.h"
+#include "support_matr_functions.h"
 
 template <typename T>
 std::vector<std::vector<T> > invert_matrix(std::vector<std::vector<T> > &X) {
@@ -45,90 +47,7 @@ std::vector<std::vector<T> > invert_matrix(std::vector<std::vector<T> > &X) {
     return matrix;
 }
 
-template <typename T>
-std::vector<std::vector<T> > sum_matrices (std::vector<std::vector<T> >&X,std::vector<std::vector<T> >&Y) {
-  std::vector<std::vector<T> > matrix(X.size());
-  for (size_t i = 0 ; i < X.size() ; i++ ){
-    matrix[i].resize(X.size());
-  }
-  for (int i = 0; i < X.size(); ++i){
-      for (int j = 0; j < X[i].size(); ++j){
-          matrix[i][j] = X[i][j] + Y[i][j];
-      }
-  }
-  return matrix;
-}
-template <typename T>
-std::vector<std::vector<T> > vector_multipl_T(std::vector<T> &X, std::vector<T> &Y){
-    std::vector<std::vector<T> > M(X.size(), std::vector<T>(X.size()));
-    for (int i = 0; i < X.size(); ++i){
-        for (int j = 0; j < X.size(); ++j){
-            M[i][j] = X[i] * Y[j];
-        }
-    }
-    return M;
-}
 
-template <typename T>
-T vector_scal_mult(std::vector<T>& X, std::vector<T>& Y) {
-  T result = 0;
-  for(size_t i = 0;i < X.size(); i++) {
-    result += X[i]*Y[i];
-  }
-  return result;
-}
-
-template <typename T>
-std::vector<T> vectors_sum(std::vector<T>& X, std::vector<T>& Y) {
-  std::vector<T> result_v(X.size());
-  for(size_t i = 0;i < X.size(); i++) {
-    result_v[i] = X[i] + Y[i];
-  }
-  return result_v;
-}
-
-template<typename T>
-std::vector<T> vectors_difference(std::vector<T>& X, std::vector<T>& Y) {
-  std::vector<T> result_v(X.size());
-  for(size_t i = 0;i < X.size();i++) {
-    result_v[i] = X[i] - Y[i];
-  }
-  return result_v;
-}
-
-template <typename T>
-std::vector<T> matr_vec_multiply(std::vector<std::vector<T> > &Hess, std::vector<T> &Y) {
-  std::vector<T> result(Y.size());
-    for(size_t i = 0; i < Hess.size();i++) {
-      for(size_t j = 0; j < Hess[i].size();j++) {
-          result[i] += Hess[i][j]*Y[i];
-      }
-    }
-    return result;
-}
-
-template <typename T>
-std::vector<T> scalar_mult_vec(std::vector<T> &X,T scalar) {
-  std::vector<T> result(X.size());
-  for(size_t i = 0; i < X.size();i++) {
-    result[i] = X[i] * scalar;
-  }
-  return result;
-}
-
-template <typename T>
-std::vector<std::vector<T> > mult_matrix_on_scalar(std::vector<std::vector<T> >& matr,T scalar) {
-  std::vector<std::vector<T> > result(matr.size());
-  for (size_t i = 0 ; i < matr.size() ; i++ ){
-    result[i].resize(matr.size());
-  }
-  for(size_t i=0; i < matr.size(); i++) {
-    for(size_t j = 0; j < matr[i].size(); j++) {
-      result[i][j]=matr[i][j]*scalar;
-    }
-  }
-  return result;
-}
 
 /* Nabla is vector that holds derivatives by each variable accordingly
 * Example:
@@ -147,10 +66,7 @@ std::vector<T> nabla(std::vector<T>& X, std::vector<T> (*derivative)(std::vector
     g_(k+1) = nabla_f (x_(k+1)) g_(k) = nabla_f(x_(k))
     p_(k) = x_(k+1) - x_(k)
     q_(k) = g_(k+1) - g_(k) = nabla_f (x_(k+1)) - nabla_f(x_(k))
-*/
 
-
-/*
   H_0 = I = (1 0)
             (0 1)
   General plan
@@ -228,7 +144,7 @@ void DFP(std::vector<T> & X) {
       */
        /* Denominator will be matrix */
        std::vector<std::vector<T> > matrix_to_inverse = vector_multipl_T(q_k,H_kq_K);
-      // matrix_to_inverse = invert_matrix(matrix_to_inverse); //infinite cycle fix 
+      // matrix_to_inverse = invert_matrix(matrix_to_inverse); //infinite cycle fix
        std::vector<std::vector<T> > final_matr = mult_matrix_on_scalar(matrix_to_inverse,T(1)/numerator);
 
        std::vector<std::vector<T> > hessian_matr_next = sum_matrices(hessian_matr,final_matr);
