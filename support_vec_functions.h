@@ -1,5 +1,6 @@
 
 #include <vector>
+#include <iostream>
 
 template <typename T>
 std::vector<T> scalar_mult_vec(std::vector<T> &X,T scalar) {
@@ -35,4 +36,12 @@ std::vector<T> vectors_difference(std::vector<T>& X, std::vector<T>& Y) {
     result_v[i] = X[i] - Y[i];
   }
   return result_v;
+}
+
+template<typename T>
+void VecOut(std::vector<T>& X) {
+  for(size_t i = 0;i < X.size();i++) {
+    std::cout<< X[i]<<std::endl;
+  }
+
 }
