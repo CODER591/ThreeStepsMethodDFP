@@ -40,6 +40,15 @@ std::vector<T> vectors_difference(std::vector<T>& X, std::vector<T>& Y) {
   }
   return result_v;
 }
+template<typename T>
+T inner_product_own(std::vector<T>& X, std::vector<T>& Y) {
+  T sum = 0;
+  for(size_t i = 0;i < X.size();i++) {
+    sum += X[i] * Y[i];
+  }
+  return sum;
+}
+
 
 template<typename T>
 void VecOut(std::vector<T>& X) {

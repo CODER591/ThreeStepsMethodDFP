@@ -28,14 +28,16 @@ typedef long double LONG;
 template <typename T>
 T Pow(T a, int powr) {
   T tmp = 1;
-  for (int i = 0; i < powr; i++)
-  {
+  for (int i = 0; i < powr; i++) {
     tmp *= a;
   }
   return tmp;
 }
 
-
+template <typename T>
+T Abs(T a) {
+  return (a < 0)?T(-1)*a:a;
+}
 
 
 #endif /* COMMON_H */
