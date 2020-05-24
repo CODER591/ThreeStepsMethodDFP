@@ -2,6 +2,9 @@
 #include <vector>
 #include <iostream>
 
+#ifndef SUPORT_VEC_FUNC
+#define SUPORT_VEC_FUNC
+
 template <typename T>
 std::vector<T> scalar_mult_vec(std::vector<T> &X,T scalar) {
   std::vector<T> result(X.size());
@@ -45,3 +48,4 @@ void VecOut(std::vector<T>& X) {
   }
 
 }
+#endif /* SUPORT_MATR_FUNC*/
