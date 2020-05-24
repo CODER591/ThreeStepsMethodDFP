@@ -5,28 +5,41 @@ Presentation with theoretical desctiption of this method is in repository files
 */
 #include <vector>
 #include <algorithm>
+#include <numeric>
+#include <functional>
+
+
 #include "testfunctions/common/common.h"
 #include "testfunctions/rosenbrock_function/rosenbrock_test_func.h"
 #include "testfunctions/sphere_function/sphere_function.h"
 #include "support_vec_functions.h"
 #include "support_matr_functions.h"
 
-/*
+
 template <typename T>
  std::vector<std::vector<T> > SR_2_Hes_Update(std::vector<std::vector<T> > & hessian,
                                              std::vector<T>& p_k, std::vector<T>& q_k) {
-   std::vector < std::vector<T> > updated_hessian = get_square_zeroed_matrix(hessian.size());
+
+  std::vector<std::vector<T> > updated_hessian (p_k.size(), std::vector<T>(p_k.size()));
   T quantifyier1 = vector_scal_mult(p_k,p_k);
-  T denomit1 =  vector_scal_mult(p_k,q_k);
-  T first_division = quantifyier1 / denomit1;
+  T denominator1 =  vector_scal_mult(p_k,q_k);
+  T first_division = quantifyier1 / denominator1;
+
+  /* second divison */
+  std::vector<T> tmp = vec_mult_matr(q_k,hessian);
+  T denominator2 = std::inner_product(tmp.begin(),tmp.end(),q_k.begin(),0);
 
 
-//  T denomit2 = vector_mult_matr();
-//  T second_division=
+  tmp = matr_vec_multiply(hessian,q_k);
+  T number_mult_on_matr = std::inner_product(tmp.begin(),tmp.end(),q_k.begin(),0);
+  //this quantifyier1 is also a second_division result
+  std::vector<std::vector<T> > quantifyier1_ = mult_matrix_on_scalar(hessian,
+                                                                     number_mult_on_matr/denominator2);
+  //updated_hessian =  hessian + first_division*I - second_division;                                                       
 
 //plus hessian
    return updated_hessian;
- }*/
+ }
 
 /* Nabla is vector that holds derivatives by each variable accordingly
 * Example:
@@ -129,8 +142,7 @@ for(int i=0;i<1;i++) {
        VecOut(q_k);
        std::cout<<"-------"<<std::endl;
 
-       std::vector <std::vector<T> > hessian_matr_next;
-      // = SR_2_Hes_Update(hessian_matr,p_k,q_k);
+       std::vector <std::vector<T> > hessian_matr_next = SR_2_Hes_Update(hessian_matr,p_k,q_k);
 
        VecOut(X);
        VecOut(X_k_next);
