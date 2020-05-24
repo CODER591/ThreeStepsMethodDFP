@@ -12,8 +12,6 @@ std::vector<std::vector<T> > get_square_zeroed_matrix( unsigned int & size) {
 }
 */
 
-
-
 template <typename T>
 std::vector<std::vector<T> > mult_matrix_on_scalar(std::vector<std::vector<T> >& matr,T scalar) {
   std::vector<std::vector<T> > result(matr.size());
@@ -42,22 +40,11 @@ std::vector<std::vector<T> > sum_matrices (std::vector<std::vector<T> >&X,std::v
   }
   return matrix;
 }
-template <typename T>
-std::vector<std::vector<T> > vector_multipl_T(std::vector<T> &X, std::vector<T> &Y){
-    std::vector<std::vector<T> > M(X.size(), std::vector<T>(X.size()));
-    for (int i = 0; i < X.size(); ++i){
-        for (int j = 0; j < X.size(); ++j){
-            M[i][j] = X[i] * Y[j];
-        }
-    }
-    return M;
-}
-
 /*
   A - matrix
   b-  vector
   p - vector;
-  A * b  = p*/
+  A * b  = p */
 template <typename T>
 std::vector<T> matr_vec_multiply(std::vector<std::vector<T> > &Hess, std::vector<T> &Y) {
   std::vector<T> result(Y.size());
@@ -92,7 +79,6 @@ void MatrOut(std::vector<std::vector<T> > &matr) {
     }
     std::cout<<std::endl;
   }
-
 }
 
 
