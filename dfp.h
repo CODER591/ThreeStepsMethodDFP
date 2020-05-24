@@ -7,6 +7,7 @@ Presentation with theoretical desctiption of this method is in repository files
 #include <algorithm>
 #include "testfunctions/common/common.h"
 #include "testfunctions/rosenbrock_function/rosenbrock_test_func.h"
+#include "testfunctions/sphere_function/sphere_function.h"
 #include "support_vec_functions.h"
 #include "support_matr_functions.h"
 
@@ -46,8 +47,18 @@ std::vector<std::vector<T> > invert_matrix(std::vector<std::vector<T> > &X) {
     }
     return matrix;
 }
+template <typename T>
+ std::vector<std::vector<T> >SR_2_Hes_Update(std::vector<std::vector<T> > & hessian,
+                                             std::vector<T>& p_k, std::vector<T>& q_k) {
+   std::vector<std::vector<T> > updated_hessian(X.size(), std::vector<T>(X.size()));
+  T quantifyier1 = vector_scal_mult(p_k,p_k);
+  T denomit1 =  vector_scal_mult(p_k,q_k);
+  T first_division = quantifyier1 / denomit1;
 
 
+
+   return updated_hessian;
+ }
 
 /* Nabla is vector that holds derivatives by each variable accordingly
 * Example:
@@ -98,19 +109,36 @@ void DFP(std::vector<T> & X) {
      hessian_matr.push_back(Sup1);
      hessian_matr.push_back(Sup2);
 
-     std::vector<T> (*rosenbrock_deriv)(std::vector<T>&) = &RosenbrockFunc_derivative;
-     T alpha = 1;
+    // std::vector<T> (*rosenbrock_deriv)(std::vector<T>&) = &RosenbrockFunc_derivative;
+    std::vector<T> (*rosenbrock_deriv)(std::vector<T>&) = &SphereFunc_derivative;
+     T alpha = 0.1;
+     T gam = 0.9999999;
+     //T gam = 0.5;
      int k = 0; /* Number of iteration*/
-
+     T eps = 0.001;
      /* Step 1
       * 1. calculate g_k
       * 2. calculate -H_k
       * 3. calculate d_k = -H_(k) * g_(k)
       */
+for(int i=0;i<1;i++) {
+//for(;;) {
 
      std::vector<T> g_k = nabla(X,rosenbrock_deriv); // check
-     std::vector<std::vector<T> > minus_H_k = mult_matrix_on_scalar(hessian_matr,(T)-1); //check
+     std::cout<<"g_k"<<std::endl;
+     VecOut(g_k);
+     std::cout<<"-------"<<std::endl;
+     std::cout<<"hessian_matr"<<std::endl;
+     MatrOut(hessian_matr);
+     std::cout<<"-------"<<std::endl;
+     std::vector<std::vector<T> > minus_H_k = mult_matrix_on_scalar(hessian_matr,T(-1)); //check
+     std::cout<<"minus_H_k"<<std::endl;
+     MatrOut(minus_H_k);
+     std::cout<<"-------"<<std::endl;
      std::vector<T> d_k = matr_vec_multiply(minus_H_k, g_k); //check
+     std::cout<<"d_k"<<std::endl;
+     VecOut(d_k);
+     std::cout<<"-------"<<std::endl;
      /* Step 2
       * 1. calculate x_k+1
       * 2. calculate p_k
@@ -120,38 +148,41 @@ void DFP(std::vector<T> & X) {
       std::vector<T> X_k_next = vectors_sum(X,alpha_d_k);
       std::vector<T> p_k = alpha_d_k;
       std::vector<T> g_k_next = nabla(X_k_next,rosenbrock_deriv);
-
+      std::cout<<"g_k_next"<<std::endl;
+      VecOut(g_k_next);
+      std::cout<<"-------"<<std::endl;
       /* Step 3
        * 1. calculate q_k
        * 2. Main hessian formula
        * ....
        */
        std::vector<T>q_k = vectors_difference(g_k_next,g_k);
-
-       /* Main Hessian formula symmetric rank correction one (SR-1) */
-       /* We know the first component H_k*/
-
-       std::vector<T>H_kq_K = matr_vec_multiply(minus_H_k,q_k);
-       /*Represents p_k - H_k*q_k*/
-       std::vector<T>vec_hes_dif = vectors_sum(p_k,H_kq_K);
-       T numerator = vector_scal_mult(vec_hes_dif,vec_hes_dif);
-
+       std::cout<<"q_k"<<std::endl;
+       VecOut(q_k);
+       std::cout<<"-------"<<std::endl;
 
        /* Warning comment
        This step is need a lot of checkings, because of unrelyiable functions
        vector_multipl_T
        invert_matrix
       */
-       /* Denominator will be matrix */
-       std::vector<std::vector<T> > matrix_to_inverse = vector_multipl_T(q_k,H_kq_K);
-      // matrix_to_inverse = invert_matrix(matrix_to_inverse); //infinite cycle fix
-       std::vector<std::vector<T> > final_matr = mult_matrix_on_scalar(matrix_to_inverse,T(1)/numerator);
+      // SR_2_Hes_Update(hessian_matr,p_k,q_k);
 
-       std::vector<std::vector<T> > hessian_matr_next = sum_matrices(hessian_matr,final_matr);
+       VecOut(X);
+       VecOut(X_k_next);
+       std::cout<<"Ros vid X="<< RosenbrockFunc(X)<<std::endl;
+       std::cout<<"Ros vid X_k_next="<< RosenbrockFunc(X_k_next)<<std::endl;
 
+       /*if(RosenbrockFunc(X_k_next)-RosenbrockFunc(X)<eps){
+         break;
+       }*/
+       X = X_k_next;
+       hessian_matr = hessian_matr_next;
+       alpha *=gam;
        k+=1;
+       std::cout<<"--------------------END OF ITERAION---------"<<std::endl;
 
-
+ }
 
 
 

@@ -13,7 +13,8 @@
 
 #ifdef USE_PREPRO
 
-#define LONG long double
+//#define LONG long double
+#define LONG double
 
 #else
 
