@@ -11,54 +11,22 @@ Presentation with theoretical desctiption of this method is in repository files
 #include "support_vec_functions.h"
 #include "support_matr_functions.h"
 
+/*
 template <typename T>
-std::vector<std::vector<T> > invert_matrix(std::vector<std::vector<T> > &X) {
-  int i,j,k;
-  T a,ratio;
-  std::vector<std::vector<T> > matrix(X.size());
-  for (size_t i = 0 ; i < X.size() ; i++ ){
-    matrix[i].resize(X.size());
-  }
-
-  int n = X.size();
-  for(i = 0; i < n; i++){
-        for(j = n; j < 2*n; j++){
-            if(i==(j-n))
-                matrix[i][j] = 1.0;
-            else
-                matrix[i][j] = 0.0;
-        }
-    }
-    for(i = 0; i < n; i++){
-        for(j = 0; j < n; j++){
-            if(i!=j){
-                ratio = matrix[j][i]/matrix[i][i];
-                for(k = 0; k < 2*n; k++){
-                    matrix[j][k] -= ratio * matrix[i][k];
-                }
-            }
-        }
-    }
-    for(i = 0; i < n; i++){
-        a = matrix[i][i];
-        for(j = 0; j < 2*n; j++){
-            matrix[i][j] /= a;
-        }
-    }
-    return matrix;
-}
-template <typename T>
- std::vector<std::vector<T> >SR_2_Hes_Update(std::vector<std::vector<T> > & hessian,
+ std::vector<std::vector<T> > SR_2_Hes_Update(std::vector<std::vector<T> > & hessian,
                                              std::vector<T>& p_k, std::vector<T>& q_k) {
-   std::vector<std::vector<T> > updated_hessian(X.size(), std::vector<T>(X.size()));
+   std::vector < std::vector<T> > updated_hessian = get_square_zeroed_matrix(hessian.size());
   T quantifyier1 = vector_scal_mult(p_k,p_k);
   T denomit1 =  vector_scal_mult(p_k,q_k);
   T first_division = quantifyier1 / denomit1;
 
 
+//  T denomit2 = vector_mult_matr();
+//  T second_division=
 
+//plus hessian
    return updated_hessian;
- }
+ }*/
 
 /* Nabla is vector that holds derivatives by each variable accordingly
 * Example:
@@ -161,12 +129,8 @@ for(int i=0;i<1;i++) {
        VecOut(q_k);
        std::cout<<"-------"<<std::endl;
 
-       /* Warning comment
-       This step is need a lot of checkings, because of unrelyiable functions
-       vector_multipl_T
-       invert_matrix
-      */
-      // SR_2_Hes_Update(hessian_matr,p_k,q_k);
+       std::vector <std::vector<T> > hessian_matr_next;
+      // = SR_2_Hes_Update(hessian_matr,p_k,q_k);
 
        VecOut(X);
        VecOut(X_k_next);
@@ -178,8 +142,8 @@ for(int i=0;i<1;i++) {
        }*/
        X = X_k_next;
        hessian_matr = hessian_matr_next;
-       alpha *=gam;
-       k+=1;
+       alpha *= gam;
+       k++;
        std::cout<<"--------------------END OF ITERAION---------"<<std::endl;
 
  }
