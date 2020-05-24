@@ -13,8 +13,8 @@
 
 #ifdef USE_PREPRO
 
-//#define LONG long double
-#define LONG double
+#define LONG long double
+//#define LONG double
 
 #else
 
@@ -26,8 +26,7 @@ typedef long double LONG;
 /* Not quite remember regarding reason of redefinition of this function */
 //delete me pretendent
 template <typename T>
-T Pow(T a, int powr)
-{
+T Pow(T a, int powr) {
   T tmp = 1;
   for (int i = 0; i < powr; i++)
   {

@@ -89,12 +89,22 @@ Which should be interpreted as A - (5 * I)
 I is zeroed matrix with 1 on main diagonal
  */
 template <typename T>
-std::vector<T> matr_substract_number(std::vector<std::vector<T> > & Matr, T & number) {
+std::vector<std::vector<T> > matr_substract_number(std::vector<std::vector<T> > & Matr, T & number) {
   std::vector<std::vector<T> > result (Matr.size(), std::vector<T>(Matr.size()));
   for(size_t i = 0; i < result.size(); i++) {
        result[i][i] = number;
   }
   result = substract_matrices(Matr,result);
+  return result;
+}
+
+template <typename T>
+std::vector<std::vector<T> > matr_plus_number(std::vector<std::vector<T> > & Matr, T & number) {
+  std::vector<std::vector<T> > result (Matr.size(), std::vector<T>(Matr.size()));
+  for(size_t i = 0; i < result.size(); i++) {
+       result[i][i] = number;
+  }
+  result = sum_matrices(Matr,result);
   return result;
 }
 
