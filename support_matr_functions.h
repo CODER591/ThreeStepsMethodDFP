@@ -64,7 +64,7 @@ std::vector<T> matr_vec_multiply(std::vector<std::vector<T> > &Hess, std::vector
   std::vector<T> result(Y.size());
   for(size_t i = 0; i < Hess.size();i++) {
     for(size_t j = 0; j < Hess[i].size();j++) {
-       result[i] += Hess[i][j]*Y[j];
+       result[i] += Hess[i][j] * Y[j];
     }
   }
   return result;
@@ -79,9 +79,22 @@ std::vector<T> vec_mult_matr(std::vector<T>& Y, std::vector<std::vector<T> >& He
   std::vector<T> result(Y.size());
   for(size_t i = 0; i < Hess.size(); i++) {
     for(size_t j = 0; j < Hess[i].size(); j++) {
-       result[j] += Y[i]* Hess[i][j];
+       result[j] += Y[i] * Hess[i][j];
     }
   }
+  return result;
+}
+/* Use where we need to A - 5
+Which should be interpreted as A - (5 * I)
+I is zeroed matrix with 1 on main diagonal
+ */
+template <typename T>
+std::vector<T> matr_substract_number(std::vector<std::vector<T> > & Matr, T & number) {
+  std::vector<std::vector<T> > result (Matr.size(), std::vector<T>(Matr.size()));
+  for(size_t i = 0; i < result.size(); i++) {
+       result[i][i] = number;
+  }
+  result = substract_matrices(Matr,result);
   return result;
 }
 
