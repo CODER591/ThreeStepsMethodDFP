@@ -2,14 +2,17 @@
 #include <vector>
 #include <iostream>
 
+#ifndef SUPORT_MATR_FUNC
+#define SUPORT_MATR_FUNC
+
 //avoid copy here
 /*
 std::vector<std::vector<T> > get_square_zeroed_matrix( unsigned int & size) {
    return std::vector<std::vector<T> > (size, std::vector<T>(size));
 }
 */
-#ifndef SUPORT_MATR_FUNC
-#define SUPORT_MATR_FUNC
+
+
 
 template <typename T>
 std::vector<std::vector<T> > mult_matrix_on_scalar(std::vector<std::vector<T> >& matr,T scalar) {
@@ -73,11 +76,11 @@ std::vector<T> matr_vec_multiply(std::vector<std::vector<T> > &Hess, std::vector
 template <typename T>
 std::vector<T> vec_mult_matr(std::vector<T>& Y, std::vector<std::vector<T> >& Hess) {
   std::vector<T> result(Y.size());
-    for(size_t i = 0; i < Hess.size(); i++) {
-      for(size_t j = 0; j < Hess[i].size(); j++) {
-          result[i] += Y[i]* Hess[i][j];
+  for(size_t i = 0; i < Hess.size(); i++) {
+    for(size_t j = 0; j < Hess[i].size(); j++) {
+          result[j] += Y[i]* Hess[i][j];
       }
-    }
+  }
     return result;
 }
 
