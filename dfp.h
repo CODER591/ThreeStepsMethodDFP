@@ -12,8 +12,8 @@ Presentation with theoretical desctiption of this method is in repository files
 #include "testfunctions/common/common.h"
 #include "testfunctions/rosenbrock_function/rosenbrock_test_func.h"
 #include "testfunctions/sphere_function/sphere_function.h"
-#include "support_vec_functions.h"
-#include "support_matr_functions.h"
+#include "testfunctions/common/support_vec_functions.h"
+#include "testfunctions/common/support_matr_functions.h"
 
 
 template <typename T>
